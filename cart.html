@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+</head>
+<body class="bg-indigo-400">
+  
+  <nav class="bg-indigo-900 h-14 sm:h-16 flex items-center justify-between p-5 text-xl sm:text-2xl font-bold text-white">
+    Cart
+    <i id="home" class="fa-solid fa-house hover:cursor-pointer text-2xl"></i>
+  </nav>
+
+  
+  <div id="total-price" class="mt-8 font-bold text-xl sm:text-2xl text-center"></div>
+
+  
+  <div id="products-container" class="flex flex-wrap justify-center items-center p-4 gap-4"></div>
+
+  
+  <div class="flex justify-center mt-8">
+    <button id="checkout-btn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700">
+      Checkout
+    </button>
+  </div>
+
+  <script>
+    const productsContainer = document.getElementById('products-container');
+    const totalPriceContainer = document.getElementById('total-price');
+    let selectedProducts = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+
+    function renderCart() {
+      productsContainer.innerHTML = ''; 
+      let totalPrice = 0; 
+      
+      selectedProducts.forEach((product, index) => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('listItem', 'bg-white', 'shadow-md', 'rounded-xl', 'p-4', 'flex', 'flex-col', 'items-center', 'mb-4', 'w-full', 'sm:w-[300px]', 'min-h-[450px]');
+
+        
+        const img = document.createElement('img');
+        img.src = product.image;
+        img.alt = 'product image';
+        img.classList.add('h-48', 'w-full', 'object-cover', 'mb-4'); 
+        productDiv.appendChild(img);
+
+       
+        const title = document.createElement('h1');
+        title.textContent = product.title;
+        title.classList.add('text-center', 'font-bold', 'text-lg', 'mb-2');
+        productDiv.appendChild(title);
+
+        
+        const quantityContainer = document.createElement('div');
+        quantityContainer.classList.add('flex', 'items-center', 'justify-between', 'w-full', 'mb-2');
+        
+        const label = document.createElement('label');
+        label.textContent = 'Qty:';
+        label.classList.add('font-bold', 'mr-2');
+        quantityContainer.appendChild(label);
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.value = product.quantity;
+        quantityInput.min = '1';
+        quantityInput.classList.add('quantity-input', 'w-16', 'text-center', 'p-2', 'rounded-lg', 'border', 'border-gray-300');
+        quantityContainer.appendChild(quantityInput);
+
+        const price = document.createElement('p');
+        price.textContent = `Rs. ${product.price}`;
+        price.classList.add('font-bold', 'text-lg', 'text-indigo-600');
+        quantityContainer.appendChild(price);
+
+        productDiv.appendChild(quantityContainer);
+
+       
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.classList.add('bg-red-600', 'text-white', 'rounded-lg', 'py-2', 'px-4', 'hover:bg-red-700');
+        removeButton.addEventListener('click', () => {
+          selectedProducts.splice(index, 1);
+          localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+          renderCart();  
+        });
+        productDiv.appendChild(removeButton);
+
+        productsContainer.appendChild(productDiv);
+
+        
+        totalPrice += product.price * product.quantity;
+
+        
+        quantityInput.addEventListener('input', (e) => {
+          const newQuantity = parseInt(e.target.value);
+          if (newQuantity > 0) {
+            selectedProducts[index].quantity = newQuantity;
+            localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+            renderCart();  
+          }
+        });
+      });
+
+      totalPriceContainer.textContent = `Total Price: Rs. ${totalPrice.toFixed(2)}`;
+    }
+
+    renderCart();
+
+    
+    const home = document.getElementById("home");
+    home.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+   
+    const checkoutBtn = document.getElementById('checkout-btn');
+    checkoutBtn.addEventListener('click', () => {
+      if (selectedProducts.length === 0) {
+        alert('Your cart is empty!');
+      } else {
+        alert('Proceeding to checkout...');
+        
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  
+  <nav class="bg-indigo-900 p-5 flex flex-wrap items-center justify-between text-white relative">
+    <h1 class="text-3xl font-bold">Fake Store</h1>
+    <div class="flex items-center mt-4 sm:mt-0">
+      <input type="text" class="rounded-md w-40 sm:w-64 p-2" placeholder="Search">
+      <i class="fa-solid fa-magnifying-glass text-indigo-900 -ml-8"></i>
+    </div>
+
+    
+    <div class="sm:hidden flex items-center">
+      <button id="menu-btn" class="text-2xl hover:cursor-pointer focus:outline-none focus:ring focus:ring-indigo-300 rounded p-1">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    
+    <div class="hidden sm:flex items-center space-x-4">
+      <i id="cart" class="fa-solid fa-cart-shopping text-2xl cursor-pointer"></i>
+      <i id="home" class="fa-solid fa-house text-2xl cursor-pointer"></i>
+    </div>
+
+   
+    <div id="dropdown-menu" class="absolute right-5 top-16 bg-white text-black rounded-lg shadow-lg hidden w-40">
+      <div class="flex flex-col p-2">
+        <button id="cart-mobile" class="flex items-center space-x-2 p-2 hover:bg-indigo-200 rounded">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>Cart</span>
+        </button>
+        <button id="home-mobile" class="flex items-center space-x-2 p-2 hover:bg-indigo-200 rounded">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+ 
+  <div id="products-container" class="flex flex-col md:flex-row items-center justify-center p-5 bg-indigo-400">
+    
+  </div>
+
+  <script>
+    const productsContainer = document.getElementById('products-container');
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id'); 
+
+    fetch(`https://fakestoreapi.com/products/${productId}`)
+      .then(res => res.json())
+      .then(product => {
+        const productElement = document.createElement('div');
+        productElement.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-indigo-400', 'rounded-lg', 'shadow-lg', 'w-full', 'max-w-screen-lg', 'p-5', 'space-y-5', 'md:space-y-0', 'md:space-x-8');
+
+        const img = document.createElement('img');
+        img.src = product.image;
+        img.alt = product.title;
+        img.classList.add('rounded-xl', 'object-cover', 'w-full', 'md:w-[450px]', 'h-[450px]', 'p-4', 'border-4', 'border-indigo-900', 'bg-white');
+        productElement.appendChild(img);
+
+        const detailsDiv = document.createElement('div');
+        detailsDiv.classList.add('flex', 'flex-col', 'space-y-4', 'text-white', 'w-full', 'md:w-1/2');
+
+        const title = document.createElement('h1');
+        title.textContent = product.title;
+        title.classList.add('text-2xl', 'font-bold');
+        detailsDiv.appendChild(title);
+
+        const category = document.createElement('p');
+        category.textContent = `Category: ${product.category}`;
+        category.classList.add('text-lg', 'font-semibold', 'bg-indigo-600', 'rounded', 'p-2', 'w-max');
+        detailsDiv.appendChild(category);
+
+        const description = document.createElement('p');
+        description.textContent = product.description;
+        description.classList.add('text-base');
+        detailsDiv.appendChild(description);
+
+        const price = document.createElement('p');
+        price.textContent = `Price: Rs. ${product.price}`;
+        price.classList.add('text-lg', 'font-semibold', 'bg-indigo-600', 'rounded', 'p-2', 'w-max');
+        detailsDiv.appendChild(price);
+
+        
+        const quantityLabel = document.createElement('label');
+        quantityLabel.textContent = 'Quantity:';
+        detailsDiv.appendChild(quantityLabel);
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.value = '1'; 
+        quantityInput.min = '1';
+        quantityInput.classList.add('w-16', 'p-2', 'rounded-lg', 'border','text-black');
+        detailsDiv.appendChild(quantityInput);
+
+       
+        const cartButton = document.createElement('button');
+        cartButton.textContent = 'Add To Cart';
+        cartButton.classList.add('bg-indigo-900', 'text-white', 'rounded-lg', 'font-bold', 'p-3', 'w-full', 'mt-4');
+        detailsDiv.appendChild(cartButton);
+
+        productElement.appendChild(detailsDiv);
+
+       
+        cartButton.addEventListener('click', () => {
+          let selectedProducts = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+          const existingProduct = selectedProducts.find(item => item.id === product.id);
+
+          const selectedQuantity = parseInt(quantityInput.value);
+
+          if (existingProduct) {
+            existingProduct.quantity += selectedQuantity; 
+          } else {
+            const productData = {
+              id: product.id,
+              title: product.title,
+              price: product.price,
+              image: product.image,
+              quantity: selectedQuantity
+            };
+            selectedProducts.push(productData);
+          }
+
+          localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+          alert('Product added to cart');
+          window.location.href = 'cart.html';
+        });
+
+        productsContainer.appendChild(productElement);
+      })
+      .catch(error => console.error('Error fetching product:', error));
+
+   
+    document.getElementById("home").addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+   
+    document.getElementById("cart").addEventListener('click', () => {
+      window.location.href = 'cart.html';
+    });
+
+    
+    const menuBtn = document.getElementById('menu-btn');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const cartMobile = document.getElementById('cart-mobile');
+    const homeMobile = document.getElementById('home-mobile');
+
+    
+    menuBtn.addEventListener('click', () => {
+      dropdownMenu.classList.toggle('hidden');
+    });
+
+   
+    window.addEventListener('click', (event) => {
+      if (!menuBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.classList.add('hidden');
+      }
+    });
+
+    
+    cartMobile.addEventListener('click', () => {
+      window.location.href = 'cart.html'; 
+    });
+
+    homeMobile.addEventListener('click', () => {
+      window.location.href = 'index.html'; 
+    });
+  </script>
+</body>
+</html>
