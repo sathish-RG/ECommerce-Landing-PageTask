@@ -10,7 +10,7 @@ fetch('https://fakestoreapi.com/products')
 
     json.forEach(product => {
       const productItem = document.createElement('div');
-      productItem.classList.add('listItem', 'flex', 'min-h-[420px]', 'w-72', 'flex-col', 'justify-between', 'bg-white', 'mt-6', 'ml-4', 'mr-4', 'rounded-2xl', 'relative', 'items-center');
+      productItem.classList.add('listItem', 'bg-white', 'shadow-md', 'rounded-xl', 'p-4', 'flex', 'flex-col', 'items-center', 'mb-4', 'w-full', 'sm:w-[300px]', 'min-h-[420px]','relative');
 
       const img = document.createElement('img');
       img.src = product.image;
@@ -20,7 +20,7 @@ fetch('https://fakestoreapi.com/products')
       const title = document.createElement('h1');
       title.textContent = product.title;
       productItem.appendChild(title);
-      title.classList.add('w-72', 'text-center','hover:cursor-pointer', 'font-bold', 'pb-4', 'pt-60', 'p-2', 'items-center');
+      title.classList.add('w-60', 'text-center','hover:cursor-pointer', 'font-bold', 'pb-4', 'pt-60', 'p-2', 'items-center','relative');
 
       const addToCartButton = document.createElement('button');
       addToCartButton.textContent = 'Add to Cart';
