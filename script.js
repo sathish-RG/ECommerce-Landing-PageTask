@@ -10,7 +10,7 @@ fetch('https://fakestoreapi.com/products')
 
     json.forEach(product => {
       const productItem = document.createElement('div');
-      productItem.classList.add('listItem', 'bg-white', 'shadow-md', 'rounded-xl', 'p-4', 'flex', 'flex-col', 'items-center', 'mb-4', 'w-full', 'sm:w-[300px]', 'min-h-[420px]','relative');
+      productItem.classList.add('listItem', 'bg-white', 'shadow-md', 'rounded-xl', 'p-0', 'flex', 'flex-col', 'items-center', 'mb-4', 'w-full', 'sm:w-[300px]', 'min-h-[420px]','relative');
 
       const img = document.createElement('img');
       img.src = product.image;
@@ -24,7 +24,7 @@ fetch('https://fakestoreapi.com/products')
 
       const addToCartButton = document.createElement('button');
       addToCartButton.textContent = 'Add to Cart';
-      addToCartButton.classList.add('bg-indigo-900', 'hover:bg-red-600', 'font-bold', 'text-xl', 'text-white', 'rounded-2xl', 'flex', 'absolute', 'top-80', 'mt-7', 'text-center', 'w-full', 'h-20', 'p-8', 'pl-[110px]','items-center');
+      addToCartButton.classList.add('bg-indigo-900', 'hover:bg-red-600', 'font-bold', 'text-xl', 'text-white', 'rounded-2xl', 'flex', 'absolute', 'top-80', 'mt-7', 'text-center', 'w-full', 'h-20', 'p-8', 'pl-[110px]');
       productItem.appendChild(addToCartButton);
 
       const price = document.createElement('h2');
