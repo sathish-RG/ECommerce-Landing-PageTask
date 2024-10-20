@@ -24,7 +24,7 @@ fetch('https://fakestoreapi.com/products')
 
       const addToCartButton = document.createElement('button');
       addToCartButton.textContent = 'Add to Cart';
-      addToCartButton.classList.add('bg-indigo-900', 'hover:bg-red-600', 'font-bold', 'text-xl', 'text-white', 'rounded-2xl', 'flex', 'absolute', 'top-80', 'mt-7', 'text-center', 'w-full', 'h-20', 'p-8', 'pl-[100px]');
+      addToCartButton.classList.add('bg-indigo-900', 'hover:bg-red-600', 'font-bold', 'text-xl', 'text-white', 'rounded-2xl', 'flex', 'relative', 'top-5', 'mt-7', 'text-center', 'w-[326px]', 'h-20', 'p-8', 'pl-[110px]');
       productItem.appendChild(addToCartButton);
 
       const price = document.createElement('h2');
