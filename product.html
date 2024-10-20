@@ -58,7 +58,7 @@
       .then(res => res.json())
       .then(product => {
         const productElement = document.createElement('div');
-        productElement.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-indigo-400', 'rounded-lg', 'shadow-lg', 'w-full', 'max-w-screen-lg', 'p-5', 'space-y-5', 'md:space-y-0', 'md:space-x-8');
+        productElement.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-indigo-400', 'rounded-lg', 'shadow-lg', 'w-[300px]', 'max-w-screen-lg', 'p-5', 'space-y-5', 'md:space-y-0', 'md:space-x-8');
 
         const img = document.createElement('img');
         img.src = product.image;
